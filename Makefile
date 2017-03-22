@@ -1,6 +1,10 @@
+DEF= -D__DEBUG__
 SRC=main.c
+INC=.
+ARGS="prog"
+CFLAGS +=$(DEF) -Wall
 
-all:main.c
-    gcc main.c -o ./a
-    ./a
+all:$(SRC)
+	@gcc $(SRC) $(CFLAGS) -I$(INC) -o ./a
+	@./a $(ARGS)
 
