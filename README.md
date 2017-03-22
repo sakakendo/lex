@@ -19,9 +19,24 @@ dev-branch
 master-branch
 
 # parser
-1.Variable declaration
-2.Function declaration
-3.If Statement declaration
+1.Variable declaration  
+2.Function declaration  
+3.If Statement declaration  
+
+return the attribute of lexed component
+1.reserved <character>
+	1.1 int,double,float,char
+	1.2 if,goto,while...
+2.number
+	2.1 [0-9]
+	2.2 '-','.'
+3.symbol
+	3.1 {} 	block
+	3.2 []	array
+	3.3	()	function
+	3.4	""	string
+	3.5	''	convert char to int
+	3.6	+,-,*,\,%	operator
 
 <http://home.a00.itscom.net/hatada/lp2016/chap10/parser01.html>
 

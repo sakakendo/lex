@@ -38,6 +38,9 @@ int mem[MEM_SIZE]={};
 int lexLen;
 char lexed[128][128]={"int","hello","world"};
 
+int parseLen;
+char parsed[128][128]={};
+
 void initArray(char p[],int n){
 	for(int i=0;i<n;i++){
 		p[i]=0;
@@ -91,15 +94,6 @@ char *nToReserved(int n){
 	debug1("unknown number:%d",n);
 	return "\0";
 }
-
-int reservedCheck(char *str){
-	for(int i=0;i<RESERVED_END;i++){
-		if(strcmp(str,reserved[i])==0){
-			debug1("reserved %s",nToReserved(i));
-		}
-	}
-	return 0;
-}
 void pass(){
 }
 
@@ -146,13 +140,15 @@ void printLexed(){
 	}
 }
 
-int searchLexed(char *str){
-	for(int i=0;i<lexLen;i++){
+int searchLexed(char *str,int n){
+	//search next found <*str> in lexed
+	for(int i=n;i<lexLen;i++){
 		if(strcmp(str,lexed[i])==0){
-			debug1("str is found in lexed %d",i);
+			debug1("%s is found in lexed %d",str,i);
+			return i;
 		}
 	}
-	return 0;
+	return -1;
 }
 
 void findNum(char *exp,int *n){
@@ -201,9 +197,63 @@ int calc(char *exp){
 	return 0;
 }
 
+int reservedCheck(char *str){
+	for(int i=0;i<RESERVED_END;i++){
+		if(strcmp(str,reserved[i])==0){
+			debug1("reserved %s",nToReserved(i));
+			return i;
+		}
+	}
+	return -1;
+}
+
+int attribute(char *c){
+
+}
+
 void parse(){
-	printLexed();
-	searchLexed("int");
+	enum STATE{DEC_VAL=3,DEC_FUNC,EXP,NONE};
+	int attr,state;
+	int lpos,ppos;
+	debug2("state i lexed[i]");
+	for(int i=0;i<lexLen;i++){
+		attr=reservedCheck(lexed[i]);
+		//check lexed by attribute 
+		if(attr==INT){
+			state=DEC_VAL;
+			searchLexed(";",i);
+		}else{
+		
+		}
+		/*
+		   else if(lexed[i]==';'){
+			state=NONE;
+		}
+		*/
+		if(state==DEC_VAL){
+			connect(parsed[ppos++],lexed[i]);
+//			debug1("state %d %s %s",state,parsed[ppos-1],lexed[i]);
+		}else if(state==EXP){
+
+		}
+		debug1("%d %d %s",state,i,lexed[i]);
+	}
+	parseLen=ppos;
+	printParse();
+}
+
+void printParse(){
+	for(int i=0;i<parseLen;i++){
+		debug1("%d: %s",i,parsed[i]);
+	}
+}
+
+void decVal(char *exp){
+
+}
+
+void decFunc(char *exp){
+
 }
 
 void load(char *fname,char *prog){
