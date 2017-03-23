@@ -2,7 +2,7 @@ enum CLASS{CHAR,NUM,OPE,SPECIAL};
 
 //reserved list
 char *reserved[]={"int","if","+","-","*","/",";"};
-enum RESERVED{Int,IF,Sum,Sub,Multi,Div,End,RESERVED_END};
+enum RESERVED{Int,If,Sum,Sub,Multi,Div,End,RESERVED_END,UNRESERVED,NUMBER,OPERATION};
 
 int lexLen;
 char lexed[128][128]={"int","hello","world"};
@@ -27,8 +27,39 @@ char parsed[128][128]={};
 #pragma message("release mode")
 #define printd(str) pass()
 #endif //__DEBUG__
+void pass(){
+}
+int searchLexed(char *str,int n){
+	//search next found <*str> in lexed
+	for(int i=n;i<lexLen;i++){
+		if(strcmp(str,lexed[i])==0){
+			debug1("%s is found in lexed %d",str,i);
+			return i;
+		}
+	}
+	return -1;
+}
 
-
+int reservedCheck(char *str){
+	for(int i=0;i<RESERVED_END;i++){
+		if(strcmp(str,reserved[i])==0){
+//			debug1("reserved %s",nToReserved(i));
+			return i;
+		}
+	}
+	return -1;
+}
+int isNum(char *c){
+	int i;
+	while(c[i]){
+		if(48<=c[i] && c[i]<=57) {
+			pass();
+		}else{
+			return -1;
+		}
+	}
+	return 1;
+}
 void initArray(char p[],int n){
 	for(int i=0;i<n;i++){
 		p[i]=0;
@@ -78,12 +109,11 @@ void connect(char a[],char b[]){
 
 char *nToReserved(int n){
 	if(n==Int) return "int";
-	else if (n==IF) return "if";
+	else if (n==If) return "if";
 	debug1("unknown number:%d",n);
 	return "\0";
 }
-void pass(){
-}
+
 
 int lex(char *exp){
 	int c0,c1=0,cnt=0;

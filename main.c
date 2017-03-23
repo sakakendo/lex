@@ -37,37 +37,30 @@ struct memInfo{
 
 //my string function
 char *chrSlice(char *str,int first,int end){
-
+	char str1[end-first];
+	for(int i=first,j=0;i<end;i++,j++){
+		str1[j]=str[i];
+	}
+	return str1;
 }
-
 char **strSlice(char **str,int first,int end){
-
-}
-
-int searchLexed(char *str,int n){
-	//search next found <*str> in lexed
-	for(int i=n;i<lexLen;i++){
-		if(strcmp(str,lexed[i])==0){
-			debug1("%s is found in lexed %d",str,i);
-			return i;
-		}
+	char str1[end-first+128][valSize];
+	for(int i=first,j=0;i<end;i++,j++){
+		strcpy(str1[j],str[i]);
 	}
-	return -1;
+	return str1;
 }
 
-int reservedCheck(char *str){
-	for(int i=0;i<RESERVED_END;i++){
-		if(strcmp(str,reserved[i])==0){
-//			debug1("reserved %s",nToReserved(i));
-			return i;
-		}
-	}
-	return -1;
-}
 int attribute(char *c){
 	int res;
-	res=reservedCheck(c);
-	return res;
+	if(isNum(c)){
+		return NUMBER;
+	}else if(res=reservedCheck(c)){
+		return res;
+	}else{
+		return UNRESERVED;
+	}
+	return -1;
 }
 
 void printParse(){
@@ -98,7 +91,7 @@ void inputVal(char *name,int value){
 	mem[pval]=value;
 }
 
-void outputVal(char *name){
+int outputVal(char *name){
 	int pval=searchVal(name);
 	int val=mem[pval];
 	debug1("val %d",val);
@@ -119,14 +112,19 @@ void decVal(char *exp,char *type){
 	   remove(exp,type);
 	   str=token(exp,",");
 	   */
-
+	char *name={"aa"};
 	debug1("type %s :%s",type,exp);
-	addVal("aa");
+	if(searchVal(name)==-1){
+		debug1("valiable %s has been defined yet.",name);
+	}else{
+		addVal(name);
+	}
+
 }
 
 
 void parse(){
-	enum STATE{DEC_VAL=3,DEC_FUNC,EXP,NONE};
+	enum STATE{DEC_VAL,IF_STATE,DEC_FUNC,EXP,NONE};
 	int attr,state,lastState,ptype;
 	int ppos=0;
 	debug2("state i lexed[i]");
@@ -136,21 +134,31 @@ void parse(){
 			state=DEC_VAL;
 			ptype=lpos;
 			//save type for decVal()
+		}else if(attr==If){
+			state=IF_STATE;
+		}else if(attr==NUMBER){
+		
+		}else if(attr==OPERATION){
+		
 		}else if(attr==End){
 			state=NONE;
 		}
 
 		if(state==DEC_VAL){
 			connect(parsed[ppos],lexed[lpos]);
+		}else if(state==IF_STATE){
+		
 		}else{
 			if(lastState==DEC_VAL){
 				connect(parsed[ppos],lexed[lpos]);
+				debug1("%3d %-3d %-3s",attr,state,parsed[ppos]);
 				decVal(parsed[ppos],lexed[ptype]);
 				ppos++;
+			}else{
+				debug1("%3d %-3d %-3d %3s",attr,state,lpos,lexed[lpos]);
 			}
 		}
 		lastState=state;
-		debug1("%3d %-3d %-3d %3s",attr,state,lpos,lexed[lpos]);
 	}
 	parseLen=ppos;
 	printParse();
