@@ -4,140 +4,44 @@
 #include <string.h>
 #include <ctype.h>
 
-//debug functions
-#ifdef __DEBUG__
-//#pragma message("debug mode")
-#define debug()			printf("%s(%d)\n",__func__,__LINE__)
-#define debug1(fmt, ...) do{ printf("%s(%d):" fmt, __func__, __LINE__, __VA_ARGS__),printf("\n");}while(0)
-#define debug2(arg) 	do { printf("%s(%d):", __func__, __LINE__), printf("%s\n",arg); } while (0)
-//color debugger
-#define printd(...) printf("%s",__VA_ARGS__)
-#define printb(str)	printf("\x1b[30m%s",str); //black 
-#define printr(str)	printf("\x1b[31m%s",str); //red
-#define printy(str)	printf("\x1b[33m%s",str); //yellow
-//#define printb(str)	printf("\x1b[34m%s",str); //blue
-#define print_default(str)	printf("\x1b[39m%s",str); ///default
-#elif
-#pragma message("release mode")
-#define printd(str) pass()
-#endif //__DEBUG__
+#include "tools.h"
 
 //generic
 //connect(char*,char*);
 //connect(char*,char);
 //connect(char*,char*,char*)
-enum CLASS{CHAR,NUM,OPE,SPECIAL};
+/*
+enum RESERVED{Auto,Break,Case,Char,Const,Countinue,Default,
+	Do,Double,Else,Enum,Extern,Float,For,Goto,If,Int,Long,Register,
+	Return,Short,Signed,Sizeof,Static,Struct,Switch,
+	Typedef,Union,Unsigned,Void,Volatile,While,RESERVED_END};
+	*/
+//operation list
+//char *ope[]={"+","-","*","/",";"};
 
-//reserved list
-char *reserved[]={"int","if"};
-enum RESERVED{INT,IF,RESERVED_END};
+//Max len of value name
+#define valSize 16
 
+//memory -> m
 #define MEM_SIZE 128
 int mem[MEM_SIZE]={};
+int memCnt;		//defined number's count
 
-int lexLen;
-char lexed[128][128]={"int","hello","world"};
+struct memInfo{
+	char name[128];
+	int pointer;
+	int size;
+}mInfo[128];
 
-int parseLen;
-char parsed[128][128]={};
+//char mlist[128][128];
 
-void initArray(char p[],int n){
-	for(int i=0;i<n;i++){
-		p[i]=0;
-	}
-}
-
-int ischar(char c){
-	if(65<=c && c<= 90) return 1;
-	else if(97<=c && c<=122) return 1;
-	else if(95==c ) return 1;
-	else return 0;
-}
-
-int isspecial(char c){
-	// \n,\t
-	if(c=='\n' || c=='\t') return 1;
-	else return 0;
-}
-
-char* escapeSpecial(char c){
-	if(c=='\n'){
-//		debug2("\\n");
-		return "\\n";
-	}else if(c=='\t'){
-//		debug2("\\t");
-		return "\\t";
-	}
-	debug1("unknown special character :%c",c);
-	return "\0";
+//my string function
+char *chrSlice(char *str,int first,int end){
 
 }
 
-int class(char c){
-	if(ischar(c)) return CHAR;
-	else if(isdigit(c)) return NUM;
-	else if(isspecial(c)) return SPECIAL;
-	else return OPE;
-}
+char **strSlice(char **str,int first,int end){
 
-void connect(char a[],char b[]){
-	int lenSum=(int)strlen(a)+(int)strlen(b);
-	for(int i=(int)strlen(a),j=0;i<lenSum;i++,j++){
-		a[i]=b[j];
-	}
-	a[lenSum]='\0';
-}
-
-char *nToReserved(int n){
-	if(n==INT) return "int";
-	else if (n==IF) return "if";
-	debug1("unknown number:%d",n);
-	return "\0";
-}
-void pass(){
-}
-
-int lex(char *exp){
-	int c0,c1=0,cnt=0;
-	char c[16]={};
-	char cbuf[128]={};
-	char nbuf[128]={};
-	for(;*exp;exp++){
-		c[0]=*exp;
-		c1=class(*exp);
-		if(c1==NUM){
-			connect(nbuf,c);
-		}else if(c0==NUM){
-//			debug1("int  %-5s ",nbuf);
-			strcpy(lexed[cnt++],nbuf);
-			initArray(nbuf,128);
-		}
-		if(c1==CHAR){
-			connect(cbuf,c);
-		}else if(c0==CHAR){
-//			debug1("char %-5s ",cbuf);
-			strcpy(lexed[cnt++],cbuf);
-			initArray(cbuf,128);
-		}
-		if (c1==SPECIAL){
-//			debug1("spec %-5s ",escapeSpecial(*c));
-			strcpy(lexed[cnt++],escapeSpecial(*c));
-		}
-		if(c1==OPE){
-//			debug1("ope  %-5s ",c);
-			strcpy(lexed[cnt++],c);
-		}
-		c0=c1;
-	}
-	lexLen=cnt;
-	return 0;
-}
-
-void printLexed(){
-//	for(int i=0;lexed[i][0]!=NULL;i++){
-	for(int i=0;i<lexLen;i++){
-		debug1("%d: %s",i,lexed[i]);
-	}
 }
 
 int searchLexed(char *str,int n){
@@ -151,95 +55,19 @@ int searchLexed(char *str,int n){
 	return -1;
 }
 
-void findNum(char *exp,int *n){
-	int i;
-	char tmp[128];
-	do{
-		if (isdigit(*exp)){
-			tmp[i++]=*exp;
-		}else{
-			*n=atoi(tmp);
-			n++;
-			i=0;
-			initArray(tmp,128);
-		}
-	}while(*(++exp));
-	*n=atoi(tmp);
-}
-
-int calc(char *exp){
-	//input exp
-	// str(<int> <ope> <int>)
-	int n[2],i,result;
-	char ope[128],tmp[128];
-	debug();
-	debug2(exp);
-	while(*(exp)){
-		if (isdigit(*exp)){
-			tmp[i++]=*exp;
-		}else{
-			n[0]=atoi(tmp);
-			i=0;
-			tmp[0]='\0';
-			ope[0]=*exp;
-			ope[1]='\0';
-		}
-		exp++;
-	}
-	tmp[i]='\0';
-	n[1]=atoi(tmp);
-	if(*ope=='+'){
-		result=n[0]+n[1];
-	}else if(*ope=='-'){
-		debug2("ope : -");
-	}
-	debug1("n[0] ope n[1]=result:%d%c%d=%d",n[0],*ope,n[1],result);
-	return 0;
-}
-
 int reservedCheck(char *str){
 	for(int i=0;i<RESERVED_END;i++){
 		if(strcmp(str,reserved[i])==0){
-			debug1("reserved %s",nToReserved(i));
+//			debug1("reserved %s",nToReserved(i));
 			return i;
 		}
 	}
 	return -1;
 }
-
 int attribute(char *c){
-
-}
-
-void parse(){
-	enum STATE{DEC_VAL=3,DEC_FUNC,EXP,NONE};
-	int attr,state;
-	int lpos,ppos;
-	debug2("state i lexed[i]");
-	for(int i=0;i<lexLen;i++){
-		attr=reservedCheck(lexed[i]);
-		//check lexed by attribute 
-		if(attr==INT){
-			state=DEC_VAL;
-			searchLexed(";",i);
-		}else{
-		
-		}
-		/*
-		   else if(lexed[i]==';'){
-			state=NONE;
-		}
-		*/
-		if(state==DEC_VAL){
-			connect(parsed[ppos++],lexed[i]);
-//			debug1("state %d %s %s",state,parsed[ppos-1],lexed[i]);
-		}else if(state==EXP){
-
-		}
-		debug1("%d %d %s",state,i,lexed[i]);
-	}
-	parseLen=ppos;
-	printParse();
+	int res;
+	res=reservedCheck(c);
+	return res;
 }
 
 void printParse(){
@@ -248,10 +76,85 @@ void printParse(){
 	}
 }
 
-void decVal(char *exp){
-
+int searchVal(char *name){
+	for(int i=0;i<memCnt;i++){
+		if(strcmp(mInfo[i].name,name)==0){
+			debug1("pos=%d",i);
+			return i;
+		}
+	}
+	return -1;
 }
 
+void addVal(char *name){
+	//memcpy
+	strcpy(mInfo[memCnt].name,name);
+	debug1("%s %s",mInfo[memCnt].name,name);
+	memCnt++;
+}
+
+void inputVal(char *name,int value){
+	int pval=searchVal(name);
+	mem[pval]=value;
+}
+
+void outputVal(char *name){
+	int pval=searchVal(name);
+	int val=mem[pval];
+	debug1("val %d",val);
+	return val;
+}
+
+
+int printVal(){
+	for(int i=0;i<memCnt;i++){
+		debug1("%s,%d",mInfo[i].name,mem[i]);
+	}
+}
+
+void decVal(char *exp,char *type){
+	//TypeSpecifier VarDeclarator ";"
+	/*
+	   char str[128][valSize];
+	   remove(exp,type);
+	   str=token(exp,",");
+	   */
+
+	debug1("type %s :%s",type,exp);
+	addVal("aa");
+}
+
+
+void parse(){
+	enum STATE{DEC_VAL=3,DEC_FUNC,EXP,NONE};
+	int attr,state,lastState,ptype;
+	int ppos=0;
+	debug2("state i lexed[i]");
+	for(int lpos=0;lpos<lexLen;lpos++){
+		attr=attribute(lexed[lpos]);
+		if(attr==Int){
+			state=DEC_VAL;
+			ptype=lpos;
+			//save type for decVal()
+		}else if(attr==End){
+			state=NONE;
+		}
+
+		if(state==DEC_VAL){
+			connect(parsed[ppos],lexed[lpos]);
+		}else{
+			if(lastState==DEC_VAL){
+				connect(parsed[ppos],lexed[lpos]);
+				decVal(parsed[ppos],lexed[ptype]);
+				ppos++;
+			}
+		}
+		lastState=state;
+		debug1("%3d %-3d %-3d %3s",attr,state,lpos,lexed[lpos]);
+	}
+	parseLen=ppos;
+	printParse();
+}
 void decFunc(char *exp){
 
 }
@@ -278,6 +181,10 @@ int main(int argc,char **argv){
 	load(argv[1],prog);
 	lex(prog);
 	parse();
+	printVal();
+	inputVal("aa",3);
+	outputVal("aa");
+	printVal();
 //	calc(argv[1]);
     return 0;
 }
