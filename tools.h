@@ -1,8 +1,8 @@
 enum CLASS{CHAR,NUM,OPE,SPECIAL};
 
 //reserved list
-char *reserved[]={"int","if","+","-","*","/",";"};
-enum RESERVED{Int,If,Sum,Sub,Multi,Div,End,RESERVED_END,UNRESERVED,NUMBER,OPERATION};
+char *reserved[]={"base","int","if","+","-","*","/",";","\\n"};
+enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION};
 
 int lexLen;
 char lexed[128][128]={"int","hello","world"};
@@ -40,26 +40,6 @@ int searchLexed(char *str,int n){
 	return -1;
 }
 
-int reservedCheck(char *str){
-	for(int i=0;i<RESERVED_END;i++){
-		if(strcmp(str,reserved[i])==0){
-//			debug1("reserved %s",nToReserved(i));
-			return i;
-		}
-	}
-	return -1;
-}
-int isNum(char *c){
-	int i;
-	while(c[i]){
-		if(48<=c[i] && c[i]<=57) {
-			pass();
-		}else{
-			return -1;
-		}
-	}
-	return 1;
-}
 void initArray(char p[],int n){
 	for(int i=0;i<n;i++){
 		p[i]=0;
@@ -204,4 +184,18 @@ int calc(char *exp){
 	debug1("n[0] ope n[1]=result:%d%c%d=%d",n[0],*ope,n[1],result);
 	return 0;
 }
+void load(char *fname,char *prog){
+	FILE *fp;
+	char buf[128];
+	if ((fp=fopen(fname,"r"))==NULL){
+		printf("file can't open");
+		exit(EXIT_FAILURE);
+	}else{
+		printf("file open success");
+	}
+	while(fgets(buf,80,fp)){
+		connect(prog,buf);
+	}
+	debug1("program \n%s",prog);
 
+}

@@ -51,18 +51,6 @@ char **strSlice(char **str,int first,int end){
 	return str1;
 }
 
-int attribute(char *c){
-	int res;
-	if(isNum(c)){
-		return NUMBER;
-	}else if(res=reservedCheck(c)){
-		return res;
-	}else{
-		return UNRESERVED;
-	}
-	return -1;
-}
-
 void printParse(){
 	for(int i=0;i<parseLen;i++){
 		debug1("%d: %s",i,parsed[i]);
@@ -121,67 +109,94 @@ void decVal(char *exp,char *type){
 	}
 
 }
+int isNum(char c[]){
+	int i=0;
+	while(c[i]!='\0'){
+//		debug1("%d",c[i]);
+		if(48<=c[i] && c[i]<=57) {
+			pass();
+		}else{
+			return -1;
+		}
+		i++;
+	}
+	return 1;
+}
 
+int reservedCheck(char *str){
+	for(int i=RESERVED_BASE;i<RESERVED_END;i++){
+		if(strcmp(str,reserved[i])==0){
+//			debug1("reserved %d",i);
+			return i;
+		}
+	}
+	debug2("unreserved");
+	return -1;
+}
+
+int attribute(char *c){
+	int res;
+	res=reservedCheck(c);
+	if(isNum(c)!=-1){
+//		debug2("number");
+		return NUMBER;
+	}else if(res){
+//		char *reserved[]={"int","if","+","-","*","/",";"};
+//		enum RESERVED{Int,If,Sum,Sub,Multi,Div,End,RESERVED_END,UNRESERVED,NUMBER,OPERATION};
+//		debug2("reserved");
+		return res;
+	}else{
+		debug2("unreserved");
+		return UNRESERVED;
+	}
+	return -1;
+}
 
 void parse(){
-	enum STATE{DEC_VAL,IF_STATE,DEC_FUNC,EXP,NONE};
-	int attr,state,lastState,ptype;
-	int ppos=0;
-	debug2("state i lexed[i]");
+	enum parseState{ValiableDeclaration,Assignment,IfState,None};
+	char stack[128];
+	int attr,state;
 	for(int lpos=0;lpos<lexLen;lpos++){
 		attr=attribute(lexed[lpos]);
-		if(attr==Int){
-			state=DEC_VAL;
-			ptype=lpos;
-			//save type for decVal()
-		}else if(attr==If){
-			state=IF_STATE;
-		}else if(attr==NUMBER){
+		if(attr!=NewLine)	connect(stack,lexed[lpos]);
+		if(state==None){
+			debug2("none");
+			if(attr==Int){
+				debug2("valiable dec");
+				state=ValiableDeclaration;
+			}else if(attr==IfState){
+				debug2("if");
+				state=IfState;
+			}else if(attr==UNRESERVED){
+				debug2("assign");
+				state=Assignment;
+			}
+		}else if(state==ValiableDeclaration){
+			if(attr==UNRESERVED){
+			}else if(attr==End){
+				debug1("state:%dstack:%s ",state,stack);
+				initArray(stack,128);
+				state=None;
+			}
+		}else if(state==If){
 		
-		}else if(attr==OPERATION){
-		
-		}else if(attr==End){
-			state=NONE;
-		}
-
-		if(state==DEC_VAL){
-			connect(parsed[ppos],lexed[lpos]);
-		}else if(state==IF_STATE){
-		
-		}else{
-			if(lastState==DEC_VAL){
-				connect(parsed[ppos],lexed[lpos]);
-				debug1("%3d %-3d %-3s",attr,state,parsed[ppos]);
-				decVal(parsed[ppos],lexed[ptype]);
-				ppos++;
-			}else{
-				debug1("%3d %-3d %-3d %3s",attr,state,lpos,lexed[lpos]);
+		}else if(state==Assignment){
+			if(attr==UNRESERVED){
+			}else if(attr==End){
+				debug1("stack:%s state:%d",stack,state);
+				initArray(stack,128);
+				state=None;
 			}
 		}
-		lastState=state;
+		debug1("%10s %-15s %d %d",lexed[lpos],stack,state,attr);
 	}
-	parseLen=ppos;
-	printParse();
+
 }
 void decFunc(char *exp){
 
 }
 
-void load(char *fname,char *prog){
-	FILE *fp;
-	char buf[128];
-	if ((fp=fopen(fname,"r"))==NULL){
-		printf("file can't open");
-		exit(EXIT_FAILURE);
-	}else{
-		printf("file open success");
-	}
-	while(fgets(buf,80,fp)){
-		connect(prog,buf);
-	}
-	debug1("program \n%s",prog);
 
-}
 
 int main(int argc,char **argv){
 	char prog[128];
@@ -189,10 +204,7 @@ int main(int argc,char **argv){
 	load(argv[1],prog);
 	lex(prog);
 	parse();
-	printVal();
-	inputVal("aa",3);
-	outputVal("aa");
-	printVal();
 //	calc(argv[1]);
+//	reservedCheck("a");
     return 0;
 }

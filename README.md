@@ -4,6 +4,18 @@
 - [ parser ]( # parser)
 - [ function ]( # function )
 
+# ToDoLIst
+- [ ] ソースコードの整理
+	tag付け
+** すぐできそう **
+- [ ] calc関数を変数に対応させる
+- [ ] プリプロセッサの処理の追加
+** さっぱりわからん **
+- [ ] parser、モジュール単位に分ける（どんなモジュールに分ければいいのかさっぱり）
+- [ ] モジュールをそれぞれの関数に渡す
+
+
+
 ## compiler works
 1.lexer analysis  
 2.parsing syntax analysis   
