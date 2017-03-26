@@ -210,7 +210,7 @@ int main(int argc,char **argv){
 	debug2(argv[1]);
 	load(argv[1],prog);
 	lex(prog);
-//	parse();
+	parse();
 //	calc(argv[1]);
 //	reservedCheck("a");
     return 0;
