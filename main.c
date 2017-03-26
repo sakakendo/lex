@@ -4,7 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "tools.h"
+#include "inc/tools.h"
 
 //generic
 //connect(char*,char*);
@@ -37,18 +37,20 @@ struct memInfo{
 
 //my string function
 char *chrSlice(char *str,int first,int end){
-	char str1[end-first];
+	char tmp[end-first];
 	for(int i=first,j=0;i<end;i++,j++){
-		str1[j]=str[i];
+		tmp[j]=str[i];
 	}
-	return str1;
+	tmp[end-first]='\0';
+	initArray(str,end);
+	strcpy(tmp,str);
+	return str;
 }
 char **strSlice(char **str,int first,int end){
-	char str1[end-first+128][valSize];
+	char tmp[end-first+128][valSize];
 	for(int i=first,j=0;i<end;i++,j++){
-		strcpy(str1[j],str[i]);
+		strcpy(tmp[j],str[i]);
 	}
-	return str1;
 }
 
 void printParse(){
@@ -91,6 +93,7 @@ int printVal(){
 	for(int i=0;i<memCnt;i++){
 		debug1("%s,%d",mInfo[i].name,mem[i]);
 	}
+	return 0;
 }
 
 void decVal(char *exp,char *type){
@@ -192,19 +195,24 @@ void parse(){
 	}
 
 }
-void decFunc(char *exp){
 
+
+void pre(char *str){
+	debug();
+	while(*str){
+		str++;
+	}
 }
-
-
 
 int main(int argc,char **argv){
 	char prog[128];
+//	char fraw,fout;
 	debug2(argv[1]);
 	load(argv[1],prog);
 	lex(prog);
-	parse();
+//	parse();
 //	calc(argv[1]);
 //	reservedCheck("a");
     return 0;
 }
+

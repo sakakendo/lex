@@ -14,6 +14,12 @@
 - [ ] parser、モジュール単位に分ける（どんなモジュールに分ければいいのかさっぱり）
 - [ ] モジュールをそれぞれの関数に渡す
 
+## program files
+1.raw program
+	preprosess
+2.preprosessed
+	lex,parse
+	
 
 
 ## compiler works

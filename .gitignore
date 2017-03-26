@@ -4,6 +4,6 @@ GRTAGS
 GTAGS
 
 a
-inc/
 asm/
+.o
 workspace/
