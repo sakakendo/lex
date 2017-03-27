@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "lex.h"
 #include "inc/tools.h"
 
 //generic
@@ -32,8 +33,6 @@ struct memInfo{
 	int pointer;
 	int size;
 }mInfo[128];
-
-//char mlist[128][128];
 
 //my string function
 char *chrSlice(char *str,int first,int end){
@@ -148,6 +147,12 @@ int attribute(char *c){
 //		enum RESERVED{Int,If,Sum,Sub,Multi,Div,End,RESERVED_END,UNRESERVED,NUMBER,OPERATION};
 //		debug2("reserved");
 		return res;
+	}else if(c[0]=='('){
+		debug2("paren");
+		return PAREN;
+	}else if(c[0]=='{'){
+		debug2("brace");
+		return BRACE;
 	}else{
 		debug2("unreserved");
 		return UNRESERVED;
@@ -158,7 +163,7 @@ int attribute(char *c){
 void parse(){
 	enum parseState{ValiableDeclaration,Assignment,IfState,None};
 	char stack[128];
-	int attr,state;
+	int attr,state=None;
 	for(int lpos=0;lpos<lexLen;lpos++){
 		attr=attribute(lexed[lpos]);
 		if(attr!=NewLine)	connect(stack,lexed[lpos]);
@@ -182,7 +187,14 @@ void parse(){
 				state=None;
 			}
 		}else if(state==If){
-		
+			if(attr==PAREN){
+				debug1("if cond %s",stack);
+			}else if(attr==BRACE){
+				debug1("if state%s",stack);
+				initArray(stack,128);
+				state=None;
+			}
+			debug();
 		}else if(state==Assignment){
 			if(attr==UNRESERVED){
 			}else if(attr==End){
@@ -193,9 +205,7 @@ void parse(){
 		}
 		debug1("%10s %-15s %d %d",lexed[lpos],stack,state,attr);
 	}
-
 }
-
 
 void pre(char *str){
 	debug();
