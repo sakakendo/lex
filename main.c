@@ -4,7 +4,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "lex.h"
 #include "inc/tools.h"
 
 //generic
@@ -214,13 +213,31 @@ void pre(char *str){
 	}
 }
 
+void llvm(char *prog){
+	char *str={"\
+		@.str = private unnamed_addr constant [12 x i8] c\"hello world\\00\", align 1\n \
+		define i32 @main() #0 {\n \
+		%1 = alloca i32, align 4\n \
+		store i32 0, i32* %1, align 4\n \
+		%2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str, i32 0, i32 0))\n \
+		ret i32 0\n \
+		}	\n \
+		declare i32 @printf(i8*, ...) #1	\n \
+	"};
+	connect(prog,"\n");
+	connect(prog,str);
+
+}
+
 int main(int argc,char **argv){
 	char prog[128];
-//	char fraw,fout;
+	char bin[1024]={";hello"};
 	debug2(argv[1]);
 	load(argv[1],prog);
 	lex(prog);
 	parse();
+	llvm(bin);
+	setWrite("llvm.ll",bin);
 //	calc(argv[1]);
 //	reservedCheck("a");
     return 0;
