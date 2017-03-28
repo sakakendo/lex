@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -23,15 +24,6 @@ enum RESERVED{Auto,Break,Case,Char,Const,Countinue,Default,
 #define valSize 16
 
 //memory -> m
-#define MEM_SIZE 128
-int mem[MEM_SIZE]={};
-int memCnt;		//defined number's count
-
-struct memInfo{
-	char name[128];
-	int pointer;
-	int size;
-}mInfo[128];
 
 //my string function
 char *chrSlice(char *str,int first,int end){
@@ -57,59 +49,7 @@ void printParse(){
 	}
 }
 
-int searchVal(char *name){
-	for(int i=0;i<memCnt;i++){
-		if(strcmp(mInfo[i].name,name)==0){
-			debug1("pos=%d",i);
-			return i;
-		}
-	}
-	return -1;
-}
 
-void addVal(char *name){
-	//memcpy
-	strcpy(mInfo[memCnt].name,name);
-	debug1("%s %s",mInfo[memCnt].name,name);
-	memCnt++;
-}
-
-void inputVal(char *name,int value){
-	int pval=searchVal(name);
-	mem[pval]=value;
-}
-
-int outputVal(char *name){
-	int pval=searchVal(name);
-	int val=mem[pval];
-	debug1("val %d",val);
-	return val;
-}
-
-
-int printVal(){
-	for(int i=0;i<memCnt;i++){
-		debug1("%s,%d",mInfo[i].name,mem[i]);
-	}
-	return 0;
-}
-
-void decVal(char *exp,char *type){
-	//TypeSpecifier VarDeclarator ";"
-	/*
-	   char str[128][valSize];
-	   remove(exp,type);
-	   str=token(exp,",");
-	   */
-	char *name={"aa"};
-	debug1("type %s :%s",type,exp);
-	if(searchVal(name)==-1){
-		debug1("valiable %s has been defined yet.",name);
-	}else{
-		addVal(name);
-	}
-
-}
 int isNum(char c[]){
 	int i=0;
 	while(c[i]!='\0'){
@@ -213,31 +153,53 @@ void pre(char *str){
 	}
 }
 
-void llvm(char *prog){
+void llvmStart(char *prog){
 	char *str={"\
 		@.str = private unnamed_addr constant [12 x i8] c\"hello world\\00\", align 1\n \
 		define i32 @main() #0 {\n \
 		%1 = alloca i32, align 4\n \
 		store i32 0, i32* %1, align 4\n \
 		%2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str, i32 0, i32 0))\n \
+	"};
+
+	connect(prog,"\n");
+	connect(prog,str);
+}
+void llvmEnd(char *prog){
+	char *str={"\
 		ret i32 0\n \
 		}	\n \
 		declare i32 @printf(i8*, ...) #1	\n \
 	"};
-	connect(prog,"\n");
 	connect(prog,str);
-
 }
 
+int lpos=0;
+
+void lprint(const char *fmt, ...)
+{
+  va_list list;
+  int len;
+  char str[128];
+  va_start(list, fmt);
+  vsprintf(str,fmt,list);
+  len=strlen(str)+1;
+//  debug1("%s\n",str);
+
+  debug1("@.str = private unnamed_addr constant [%d x i8] c\"%s\\00\", align 1",len,str);
+  debug1("%%%d = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([%d  x i8], [%d x i8]* @.str, i32 0, i32 0)\n"
+			,lpos,len,len);
+  va_end(list);
+}
 int main(int argc,char **argv){
 	char prog[128];
-	char bin[1024]={";hello"};
-	debug2(argv[1]);
-	load(argv[1],prog);
-	lex(prog);
-	parse();
-	llvm(bin);
-	setWrite("llvm.ll",bin);
+	char lcode[1024]={";hello"};
+	lprint("hello world %d",10);
+	llvmStart(lcode);
+	llvmEnd(lcode);
+//	printfl("hello %d",33);
+//	debug1("llvm code \n %s",lcode);
+//	setWrite("llvm.ll",llvm);
 //	calc(argv[1]);
 //	reservedCheck("a");
     return 0;
