@@ -1,0 +1,9 @@
+
+GPATH
+GRTAGS
+GTAGS
+
+a
+asm/
+.o
+workspace/
