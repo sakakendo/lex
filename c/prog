@@ -1,0 +1,7 @@
+int a;
+a=1+332;
+int abc;
+int b,c;
+if(n){
+	b=3;
+}

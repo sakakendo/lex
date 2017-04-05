@@ -1,0 +1,26 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ARGS	Makefile	/^ARGS="prog"$/;"	m
+DEF	Makefile	/^DEF= -D__DEBUG__$/;"	m
+INC	Makefile	/^INC	=-I.$/;"	m
+SRC	Makefile	/^SRC=main.c$/;"	m
+attribute	main.c	/^int attribute(char *c){$/;"	f
+isNum	main.c	/^int isNum(char c[]){$/;"	f
+laddstr	main.c	/^void laddstr(const char *str,int len){$/;"	f
+llvmEnd	main.c	/^void llvmEnd(char *prog){$/;"	f
+llvmStart	main.c	/^void llvmStart(char *prog){$/;"	f
+llvmstr	main.c	/^void llvmstr(){$/;"	f
+lout	main.c	/^void lout(){$/;"	f
+lpos	main.c	/^int lpos=0;$/;"	v
+lprint	main.c	/^void lprint(const char *fmt, ...)$/;"	f
+lstr	main.c	/^char lstr[128];$/;"	v
+main	main.c	/^int main(int argc,char **argv){$/;"	f
+parse	main.c	/^void parse(){$/;"	f
+pre	main.c	/^void pre(char *fname){$/;"	f
+printParse	main.c	/^void printParse(){$/;"	f
+reservedCheck	main.c	/^int reservedCheck(char *str){$/;"	f
+valSize	main.c	24;"	d	file:

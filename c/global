@@ -1,0 +1,79 @@
+valSize            24 main.c           #define valSize 16
+MEM_SIZE           27 main.c           #define MEM_SIZE 128
+memInfo            31 main.c           struct memInfo{
+chrSlice           38 main.c           char *chrSlice(char *str,int first,int end){
+strSlice           48 main.c           char **strSlice(char **str,int first,int end){
+printParse         55 main.c           void printParse(){
+searchVal          61 main.c           int searchVal(char *name){
+addVal             71 main.c           void addVal(char *name){
+inputVal           78 main.c           void inputVal(char *name,int value){
+outputVal          83 main.c           int outputVal(char *name){
+printVal           91 main.c           int printVal(){
+decVal             98 main.c           void decVal(char *exp,char *type){
+isNum             114 main.c           int isNum(char c[]){
+reservedCheck     128 main.c           int reservedCheck(char *str){
+attribute         139 main.c           int attribute(char *c){
+parse             163 main.c           void parse(){
+parseState        164 main.c           	enum parseState{ValiableDeclaration,Assignment,IfState,None};
+ValiableDeclaration  164 main.c           	enum parseState{ValiableDeclaration,Assignment,IfState,None};
+Assignment        164 main.c           	enum parseState{ValiableDeclaration,Assignment,IfState,None};
+IfState           164 main.c           	enum parseState{ValiableDeclaration,Assignment,IfState,None};
+None              164 main.c           	enum parseState{ValiableDeclaration,Assignment,IfState,None};
+pre               210 main.c           void pre(char *str){
+main              217 main.c           int main(int argc,char **argv){
+
+
+
+
+CLASS               1 workspace/compiler/inc/tools.h enum CLASS{CHAR,NUM,OPE,SPECIAL,RIGHT,LEFT,SQUARE_RIGHT,SQUARE_LEFT};
+CHAR                1 workspace/compiler/inc/tools.h enum CLASS{CHAR,NUM,OPE,SPECIAL,RIGHT,LEFT,SQUARE_RIGHT,SQUARE_LEFT};
+NUM                 1 workspace/compiler/inc/tools.h enum CLASS{CHAR,NUM,OPE,SPECIAL,RIGHT,LEFT,SQUARE_RIGHT,SQUARE_LEFT};
+OPE                 1 workspace/compiler/inc/tools.h enum CLASS{CHAR,NUM,OPE,SPECIAL,RIGHT,LEFT,SQUARE_RIGHT,SQUARE_LEFT};
+SPECIAL             1 workspace/compiler/inc/tools.h enum CLASS{CHAR,NUM,OPE,SPECIAL,RIGHT,LEFT,SQUARE_RIGHT,SQUARE_LEFT};
+RIGHT               1 workspace/compiler/inc/tools.h enum CLASS{CHAR,NUM,OPE,SPECIAL,RIGHT,LEFT,SQUARE_RIGHT,SQUARE_LEFT};
+LEFT                1 workspace/compiler/inc/tools.h enum CLASS{CHAR,NUM,OPE,SPECIAL,RIGHT,LEFT,SQUARE_RIGHT,SQUARE_LEFT};
+SQUARE_RIGHT        1 workspace/compiler/inc/tools.h enum CLASS{CHAR,NUM,OPE,SPECIAL,RIGHT,LEFT,SQUARE_RIGHT,SQUARE_LEFT};
+SQUARE_LEFT         1 workspace/compiler/inc/tools.h enum CLASS{CHAR,NUM,OPE,SPECIAL,RIGHT,LEFT,SQUARE_RIGHT,SQUARE_LEFT};
+RESERVED            5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+RESERVED_BASE       5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+Int                 5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+If                  5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+Sum                 5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+Sub                 5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+Multi               5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+Div                 5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+End                 5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+NewLine             5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+RESERVED_END        5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+UNRESERVED          5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+NUMBER              5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+OPERATION           5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+PAREN               5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+BRACE               5 workspace/compiler/inc/tools.h enum RESERVED{RESERVED_BASE,Int,If,Sum,Sub,Multi,Div,End,NewLine,RESERVED_END,UNRESERVED,NUMBER,OPERATION,PAREN,BRACE};
+Info               14 workspace/compiler/inc/tools.h #define Info()			printf("%s(%d)\n",__func__,__LINE__)
+Info1              15 workspace/compiler/inc/tools.h #define Info1(fmt, ...) do{ printf("%s(%d):" fmt, __func__, __LINE__, __VA_ARGS__),printf("\n");}while(0)
+Info2              16 workspace/compiler/inc/tools.h #define Info2(arg) 	do { printf("%s(%d):", __func__, __LINE__), printf("%s\n",arg); } while (0)
+debug              21 workspace/compiler/inc/tools.h #define debug()			printf("%s(%d)\n",__func__,__LINE__)
+debug1             22 workspace/compiler/inc/tools.h #define debug1(fmt, ...) do{ printf("%s(%d):" fmt, __func__, __LINE__, __VA_ARGS__),printf("\n");}while(0)
+debug2             23 workspace/compiler/inc/tools.h #define debug2(arg) 	do { printf("%s(%d):", __func__, __LINE__), printf("%s\n",arg); } while (0)
+printd             25 workspace/compiler/inc/tools.h #define printd(...) printf("%s",__VA_ARGS__)
+printb             26 workspace/compiler/inc/tools.h #define printb(str)	printf("\x1b[30m%s",str); //black 
+printr             27 workspace/compiler/inc/tools.h #define printr(str)	printf("\x1b[31m%s",str); //red
+printy             28 workspace/compiler/inc/tools.h #define printy(str)	printf("\x1b[33m%s",str); //yellow
+print_default      30 workspace/compiler/inc/tools.h #define print_default(str)	printf("\x1b[39m%s",str); ///default
+printd             33 workspace/compiler/inc/tools.h #define printd(str) pass()
+pass               35 workspace/compiler/inc/tools.h void pass(){
+searchLexed        37 workspace/compiler/inc/tools.h int searchLexed(char *str,int n){
+initArray          48 workspace/compiler/inc/tools.h void initArray(char p[],int n){
+ischar             54 workspace/compiler/inc/tools.h int ischar(char c){
+isspecial          61 workspace/compiler/inc/tools.h int isspecial(char c){
+escapeSpecial      67 workspace/compiler/inc/tools.h char* escapeSpecial(char c){
+class              80 workspace/compiler/inc/tools.h int class(char c){
+connect            91 workspace/compiler/inc/tools.h void connect(char a[],char b[]){
+nToReserved        99 workspace/compiler/inc/tools.h char *nToReserved(int n){
+lex               107 workspace/compiler/inc/tools.h int lex(char *exp){
+printLexed        183 workspace/compiler/inc/tools.h void printLexed(){
+findNum           191 workspace/compiler/inc/tools.h void findNum(char *exp,int *n){
+calc              207 workspace/compiler/inc/tools.h int calc(char *exp){
+load              236 workspace/compiler/inc/tools.h void load(char *fname,char *prog){
+setWrite          253 workspace/compiler/inc/tools.h void setWrite(char *fname,char *prog){
