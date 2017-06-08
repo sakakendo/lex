@@ -4,7 +4,7 @@
 
 #define __DEBUG__
 #include "mystr.h"
-#include "list.h"
+#include "labelList.h"
 //#include "tools.h"
 
 enum TAG{UNCHAR=-1,CHAR};
@@ -17,7 +17,7 @@ int main(int argc,char **argv){
 	//name management
 	int lastc=UNCHAR,laststr,namel=0;
 	char name[100];
-	struct list *lhead=initList();
+	struct list *lhead=initLabel();
 	//,*vhead,*fhead;
 
 	do{
@@ -54,23 +54,21 @@ int main(int argc,char **argv){
 			name[namel]=c;
 			printf("name :%s\n",name);
 //			connect(*(name+namel),*c);
-
 			lastc=CHAR;
 			namel++;
 		}else{
 			if(lastc==CHAR){
 				printf("name :%s",name);
-				addList(lhead,name);
-//				addList(name);
+				addLabel(lhead,name,pptr);
 
 			}else if(lastc==UNCHAR){
 
 			}
 			lastc=UNCHAR;
-			name[0]='\0';
+			for(int i=0;name[i];i++) name[i]='\0';
 			namel=0;
 		}
 		pptr++;
-		printListAll(lhead);
+//		printLabelAll(lhead);
 	}while(1);
 }
