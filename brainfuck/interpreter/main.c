@@ -1,19 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "c/string.h"
-#include "tools.h"
+#define __DEBUG__
+#include "mystr.h"
+#include "list.h"
+//#include "tools.h"
+
+enum TAG{UNCHAR=-1,CHAR};
 
 int main(int argc,char **argv){
-	int mptr,pptr=0;
+	int mptr=0,pptr=0;
 	int memory[3000];
 	char program[3000],tmp[128];
 	char c;
+	//name management
+	int lastc=UNCHAR,laststr,namel=0;
+	char name[100];
+	struct list *lhead=initList();
+	//,*vhead,*fhead;
+
 	do{
+		printf("mptr:%d pptr:%d\n",mptr,pptr);
 		if(program[pptr]=='\0'){
 			printf("input program\n>>> ");
 			fgets(tmp,128,stdin);
-			connect(program,tmp);
+			connect(program+pptr,tmp);
 		}
 
 		c=program[pptr];
@@ -35,7 +47,30 @@ int main(int argc,char **argv){
 					pptr--;
 				}
 			}
+		}else{
+			printf("unknown command %c\n",c);
+		}
+		if( ('a'<=c && c<='z') || ('A'<=c && c<='Z') ){
+			name[namel]=c;
+			printf("name :%s\n",name);
+//			connect(*(name+namel),*c);
+
+			lastc=CHAR;
+			namel++;
+		}else{
+			if(lastc==CHAR){
+				printf("name :%s",name);
+				addList(lhead,name);
+//				addList(name);
+
+			}else if(lastc==UNCHAR){
+
+			}
+			lastc=UNCHAR;
+			name[0]='\0';
+			namel=0;
 		}
 		pptr++;
+		printListAll(lhead);
 	}while(1);
 }
